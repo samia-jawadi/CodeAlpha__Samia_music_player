@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Make sure it looks good on mobile too -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Samia Music Player</title>
+    <!-- Using Tailwind for quick styling - might refactor later -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- That cute little icon for the browser tab -->
+    <link rel="icon" href="./images/icon.png" type="image/jpg" />
+    <!-- My custom styles - this is where the magic happens -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Welcome screen - first thing people see -->
+    <div
+      id="welcome-screen"
+      class="fixed inset-0 bg-black bg-opacity-90 z-50 flex flex-col items-center justify-center transition-all duration-500"
+    >
+      <!-- Profile pic with that fancy glow effect I spent too long on -->
+      <div class="relative mb-8">
+        <img
+          src="C:\Users\Samia\Desktop\projects\samia_music_player\images\samia.jpg"
+          alt="Samia's profile photo"
+          class="w-40 h-40 rounded-full glow animate-pulse object-cover border-4 border-purple-500"
+        />
+        <!-- That little name badge that pops -->
+        <div
+          class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-1 rounded-full text-sm font-bold"
+        >
+          Samia
+        </div>
+      </div>
+      <!-- Big welcome text with bounce animation -->
+      <h1 class="text-5xl font-bold mb-4 text-white animate-bounce">Welcome</h1>
+      <!-- My personal quote - changed this like 5 times -->
+      <p class="text-xl text-white mb-8">
+        <i
+          >"Where every note is a wound and every lyric is a scar still
+          healing.<br />
+          This is the music that keeps me alive—welcome to the storm "</i
+        ><br />
+        -Samia-
+      </p>
+      <!-- Main CTA button - made it extra clickable -->
+      <button
+        id="enter-btn"
+        class="px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full hover:scale-110 transition-transform"
+      >
+        Enter Player
+      </button>
+    </div>
+    <!-- The actual music player (hidden at first) -->
+    <div class="player-container" id="player" style="display: none">
+      <button id="theme-toggle" class="absolute top-5 right-5">
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+          ></path>
+        </svg>
+      </button>
+      <!-- CD visualization - my favorite part! -->
+      <div class="cd-container">
+        <div class="cd">
+          <!-- Album art will go here dynamically -->
+          <div class="cd-image" id="cd-image"></div>
+          <!-- That little hole in the center of the CD -->
+          <div class="cd-hole"></div>
+          <!-- CD reflection for extra realism -->
+          <div class="cd-reflection"></div>
+        </div>
+      </div>
+      <!-- Track info display -->
+      <div class="track-info">
+        <h1 class="track-title" id="track-title">Track Title</h1>
+        <p class="track-artist" id="track-artist">Artist Name</p>
+      </div>
+      <!-- Progress bar - took forever to get the timing right -->
+      <div class="progress-container" id="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+      <!-- Time display - current time / total duration -->
+      <div class="time-display">
+        <span id="current-time">0:00</span>
+        <span id="duration">0:00</span>
+      </div>
+      <!-- Main controls - play/pause, next, prev etc. -->
+      <div class="controls">
+        <!-- Repeat button - three modes! -->
+        <div class="repeat-btn" id="repeat-btn" title="Repeat">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M17 1l4 4-4 4"></path>
+            <path d="M3 11V9a4 4 0 014-4h14"></path>
+            <path d="M7 23l-4-4 4-4"></path>
+            <path d="M21 13v2a4 4 0 01-4 4H3"></path>
+          </svg>
+        </div>
+        <!-- Previous track button -->
+        <div class="control-btn" id="prev-btn">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+        </div>
+        <!-- Play/pause - the big important one -->
+        <div class="control-btn play-btn" id="play-btn">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            id="play-icon"
+          >
+            <polygon points="5 3 19 12 5 21 5 3" />
+          </svg>
+        </div>
+        <!-- Next track button -->
+        <div class="control-btn" id="next-btn">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </div>
+        <!-- Shuffle button - for when I'm feeling adventurous -->
+        <div class="repeat-btn" id="shuffle-btn" title="Shuffle">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M16 3h5v5"></path>
+            <path d="M4 20L21 3"></path>
+            <path d="M21 16v5h-5"></path>
+            <path d="M15 15l6 6"></path>
+            <path d="M4 4l5 5"></path>
+          </svg>
+        </div>
+      </div>
+      <!-- Volume control - because sometimes I need to turn it down -->
+      <div class="volume-control">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M11 5L6 9H2v6h4l5 4V5z" />
+        </svg>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value="70"
+          class="w-full"
+          id="volume-control"
+        />
+      </div>
+      <!-- Playlist - where all my tracks live i hope u like them -->
+      <div class="playlist" id="playlist"></div>
+    </div>
+    <!-- The actual audio element - the real MVP -->
+    <audio id="audio"></audio>
+    <!-- My custom scripts - where the functionality happens -->
+    <script src="script.js"></script>
+  </body>
+</html>
