@@ -7,6 +7,12 @@ const playlist = [
     src: "./music/samia_jawadi-never_less.mp3",
   },
   {
+    title: "Galexy",
+    artist: "Samia",
+    cover: "./images/galexy.png",
+    src: "./music/samia_jawadi-galaxy.mp3",
+  },
+  {
     title: "Lil Nhar",
     artist: "Samia & Wizo",
     cover: "./images/Lil&Nhar.png",
